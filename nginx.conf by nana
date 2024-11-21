@@ -1,0 +1,23 @@
+worker_processes auto;
+
+
+events{
+    worker_connections 100;
+}
+
+http{
+    include mime.types;
+
+    upstream cafe_server{
+        least_conn;
+        server 3.88.56.141:3001;
+        server 3.88.56.141:3002;
+        server 3.88.56.141:3003;
+    }
+    server {
+         listen 80;
+         server_name localhost;
+
+         location / {
+            proxy_pass http://cafe_server;
+            proxy_set_header Host $host;
